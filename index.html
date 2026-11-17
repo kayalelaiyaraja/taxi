@@ -1,0 +1,1233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxiGo | Taxi Booking System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+:root {
+    --yellow: #ffc107;
+    --dark: #171717;
+    --card: #242424;
+    --light: #f5f5f5;
+    --gray: #999;
+}
+
+body {
+    background: #f4f5f7;
+    color: #222;
+}
+
+header {
+    background: var(--dark);
+    color: white;
+    padding: 18px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: var(--yellow);
+}
+
+header p {
+    color: #ddd;
+    font-size: 13px;
+}
+
+.container {
+    display: flex;
+    min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+    width: 245px;
+    background: var(--dark);
+    padding: 25px 15px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.sidebar h3 {
+    color: var(--gray);
+    font-size: 12px;
+    margin: 10px 12px 18px;
+    letter-spacing: 2px;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 8px;
+    border: none;
+    background: transparent;
+    color: white;
+    text-align: left;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+    background: var(--yellow);
+    color: black;
+    font-weight: bold;
+}
+
+main {
+    flex: 1;
+    padding: 30px;
+    min-width: 0;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-title {
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0000000a;
+    border-left: 4px solid var(--yellow);
+}
+
+.stat-card h3 {
+    color: #777;
+    font-size: 14px;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    margin-top: 12px;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px #0000000a;
+}
+
+.panel h2 {
+    margin-bottom: 20px;
+    font-size: 19px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 17px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    outline: none;
+    margin-top: 7px;
+    font-size: 14px;
+    background: white;
+}
+
+input:focus, select:focus {
+    border-color: #e5a900;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn {
+    background: var(--yellow);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 17px;
+}
+
+.btn:hover {
+    background: #e6aa00;
+}
+
+.btn-dark {
+    background: #222;
+    color: white;
+}
+
+.btn-red {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-green {
+    background: #198754;
+    color: white;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+
+th {
+    background: #f8f8f8;
+    color: #555;
+}
+
+td button {
+    padding: 7px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.pending {
+    background: #fff0c2;
+    color: #946200;
+}
+
+.completed {
+    background: #d5f5e3;
+    color: #167344;
+}
+
+.cancelled {
+    background: #ffe0e0;
+    color: #bd2929;
+}
+
+.available {
+    color: green;
+    font-weight: bold;
+}
+
+.unavailable {
+    color: red;
+    font-weight: bold;
+}
+
+.report-box {
+    background: #222;
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.report-box h2 {
+    color: var(--yellow);
+    margin-bottom: 15px;
+}
+
+.empty {
+    text-align: center;
+    color: #999;
+    padding: 25px;
+}
+
+footer {
+    background: #171717;
+    color: #aaa;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+}
+
+@media(max-width: 900px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .container {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+    }
+
+    .sidebar h3 {
+        display: none;
+    }
+
+    .sidebar button {
+        min-width: 130px;
+        margin: 0 4px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    main {
+        padding: 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card h2 {
+        font-size: 22px;
+    }
+
+    .page-title {
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🚕 Taxi<span>Go</span></div>
+    <p>Taxi Booking & Fare Management System</p>
+</header>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+    <h3>MAIN MENU</h3>
+    <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+    <button onclick="showPage('drivers',this)">👨‍✈️ Drivers</button>
+    <button onclick="showPage('vehicles',this)">🚘 Vehicles</button>
+    <button onclick="showPage('bookings',this)">📋 Bookings</button>
+    <button onclick="showPage('allocation',this)">🔑 Allocation</button>
+    <button onclick="showPage('trips',this)">💰 Trip & Fare</button>
+    <button onclick="showPage('history',this)">📊 Trip History</button>
+    <button onclick="showPage('reports',this)">📈 Reports</button>
+</aside>
+
+<main>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+    <h1 class="page-title">Dashboard</h1>
+    <p class="subtitle">Welcome to TaxiGo Management System!</p>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Drivers</h3>
+            <h2 id="totalDrivers">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Vehicles</h3>
+            <h2 id="totalVehicles">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Bookings</h3>
+            <h2 id="totalBookings">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Earnings</h3>
+            <h2 id="totalEarnings">₹0</h2>
+        </div>
+
+    </div>
+
+    <div class="panel">
+        <h2>Recent Bookings</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Pickup</th>
+                        <th>Destination</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentBookings"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- DRIVER REGISTRATION -->
+
+<section id="drivers" class="page">
+
+    <h1 class="page-title">Driver Registration</h1>
+    <p class="subtitle">Register and manage taxi drivers.</p>
+
+    <div class="panel">
+        <h2>Add New Driver</h2>
+
+        <form id="driverForm">
+
+            <div class="form-grid">
+                <div>
+                    <label>Driver Name</label>
+                    <input id="driverName" required placeholder="Enter driver name">
+                </div>
+
+                <div>
+                    <label>Phone Number</label>
+                    <input id="driverPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="10 digit number">
+                </div>
+
+                <div>
+                    <label>License Number</label>
+                    <input id="driverLicense" required placeholder="Enter license number">
+                </div>
+            </div>
+
+            <button class="btn">+ Register Driver</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Driver Details</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>License</th>
+                    </tr>
+                </thead>
+                <tbody id="driverTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- VEHICLE MANAGEMENT -->
+
+<section id="vehicles" class="page">
+
+    <h1 class="page-title">Vehicle Management</h1>
+    <p class="subtitle">Add and manage available taxi vehicles.</p>
+
+    <div class="panel">
+        <h2>Add New Vehicle</h2>
+
+        <form id="vehicleForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Vehicle Model</label>
+                    <input id="vehicleModel" required placeholder="Example: Swift Dzire">
+                </div>
+
+                <div>
+                    <label>Registration Number</label>
+                    <input id="vehicleNumber" required placeholder="TN 00 AB 1234">
+                </div>
+
+                <div>
+                    <label>Vehicle Category</label>
+                    <select id="vehicleCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="Mini">Mini - ₹12/km</option>
+                        <option value="Sedan">Sedan - ₹15/km</option>
+                        <option value="SUV">SUV - ₹20/km</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="btn">+ Add Vehicle</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Vehicle Details</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Model</th>
+                        <th>Number</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="vehicleTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- CUSTOMER BOOKING -->
+
+<section id="bookings" class="page">
+
+    <h1 class="page-title">Customer Booking</h1>
+    <p class="subtitle">Create a new taxi booking.</p>
+
+    <div class="panel">
+        <h2>New Booking</h2>
+
+        <form id="bookingForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Customer Name</label>
+                    <input id="customerName" required placeholder="Enter customer name">
+                </div>
+
+                <div>
+                    <label>Phone Number</label>
+                    <input id="customerPhone" required pattern="[0-9]{10}" maxlength="10" placeholder="10 digit number">
+                </div>
+
+                <div>
+                    <label>Pickup Location</label>
+                    <input id="pickup" required placeholder="Enter pickup location">
+                </div>
+
+                <div>
+                    <label>Destination</label>
+                    <input id="destination" required placeholder="Enter destination">
+                </div>
+
+            </div>
+
+            <button class="btn">🚕 Book Taxi</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Booking Details</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Pickup</th>
+                        <th>Destination</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- DRIVER AND VEHICLE ALLOCATION -->
+
+<section id="allocation" class="page">
+
+    <h1 class="page-title">Driver & Vehicle Allocation</h1>
+    <p class="subtitle">Assign available drivers and vehicles to bookings.</p>
+
+    <div class="panel">
+        <h2>Allocate Taxi</h2>
+
+        <form id="allocationForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Select Booking</label>
+                    <select id="allocateBooking" required></select>
+                </div>
+
+                <div>
+                    <label>Select Driver</label>
+                    <select id="allocateDriver" required></select>
+                </div>
+
+                <div>
+                    <label>Select Vehicle</label>
+                    <select id="allocateVehicle" required></select>
+                </div>
+
+            </div>
+
+            <button class="btn">Assign Taxi</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Allocation Details</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Customer</th>
+                        <th>Driver</th>
+                        <th>Vehicle</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="allocationTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- TRIP AND FARE CALCULATION -->
+
+<section id="trips" class="page">
+
+    <h1 class="page-title">Trip & Fare Calculation</h1>
+    <p class="subtitle">Calculate travel charges automatically.</p>
+
+    <div class="panel">
+        <h2>Complete Trip</h2>
+
+        <form id="tripForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Select Booking</label>
+                    <select id="tripBooking" required></select>
+                </div>
+
+                <div>
+                    <label>Distance (KM)</label>
+                    <input type="number" id="distance" min="0.1" step="0.1" required placeholder="Enter distance">
+                </div>
+
+                <div>
+                    <label>Additional Charges (₹)</label>
+                    <input type="number" id="extraCharge" min="0" step="0.01" value="0" required>
+                </div>
+
+            </div>
+
+            <button class="btn">Calculate Fare & Complete Trip</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Fare Calculation</h2>
+        <p id="fareResult">Complete a trip to view its fare details.</p>
+    </div>
+
+</section>
+
+<!-- TRIP HISTORY -->
+
+<section id="history" class="page">
+
+    <h1 class="page-title">Trip History Reports</h1>
+    <p class="subtitle">View completed, pending and cancelled bookings.</p>
+
+    <div class="panel">
+        <h2>All Trip Records</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Route</th>
+                        <th>Distance</th>
+                        <th>Fare</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- DRIVER REPORTS -->
+
+<section id="reports" class="page">
+
+    <h1 class="page-title">Driver-wise Reports</h1>
+    <p class="subtitle">Check individual driver trip performance.</p>
+
+    <div class="panel">
+        <h2>Generate Driver Report</h2>
+
+        <label>Select Driver</label>
+        <select id="reportDriver"></select>
+
+        <button class="btn" onclick="generateReport()">Generate Report</button>
+
+        <div id="reportOutput" class="report-box">
+            Select a driver to view the report.
+        </div>
+    </div>
+
+</section>
+
+</main>
+</div>
+
+<footer>
+    © 2026 TaxiGo | Taxi Booking and Fare Management System
+    <br><br>
+    Designed using HTML, CSS and JavaScript
+</footer>
+
+<script>
+
+// DATA STORAGE
+
+let drivers = JSON.parse(localStorage.getItem("taxiDrivers")) || [];
+let vehicles = JSON.parse(localStorage.getItem("taxiVehicles")) || [];
+let bookings = JSON.parse(localStorage.getItem("taxiBookings")) || [];
+
+function saveData() {
+    localStorage.setItem("taxiDrivers", JSON.stringify(drivers));
+    localStorage.setItem("taxiVehicles", JSON.stringify(vehicles));
+    localStorage.setItem("taxiBookings", JSON.stringify(bookings));
+}
+
+// NAVIGATION
+
+function showPage(page, button) {
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+    });
+
+    document.getElementById(page).classList.add("active");
+
+    document.querySelectorAll(".sidebar button").forEach(b => {
+        b.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    renderAll();
+}
+
+// HELPERS
+
+function safe(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function driverById(id) {
+    return drivers.find(d => d.id === Number(id));
+}
+
+function vehicleById(id) {
+    return vehicles.find(v => v.id === Number(id));
+}
+
+function statusBadge(status) {
+    return `<span class="badge ${status}">${status.toUpperCase()}</span>`;
+}
+
+// DRIVER REGISTRATION
+
+document.getElementById("driverForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("driverName").value.trim();
+    const phone = document.getElementById("driverPhone").value;
+    const license = document.getElementById("driverLicense").value.trim();
+
+    if (drivers.some(d => d.license.toLowerCase() === license.toLowerCase())) {
+        alert("This license is already registered!");
+        return;
+    }
+
+    drivers.push({
+        id: drivers.length ? Math.max(...drivers.map(d => d.id)) + 1 : 1,
+        name,
+        phone,
+        license
+    });
+
+    saveData();
+    this.reset();
+    renderAll();
+    alert("Driver registered successfully!");
+});
+
+// VEHICLE MANAGEMENT
+
+document.getElementById("vehicleForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const model = document.getElementById("vehicleModel").value.trim();
+    const number = document.getElementById("vehicleNumber").value.trim();
+    const category = document.getElementById("vehicleCategory").value;
+
+    if (vehicles.some(v => v.number.toLowerCase() === number.toLowerCase())) {
+        alert("Vehicle number already exists!");
+        return;
+    }
+
+    vehicles.push({
+        id: vehicles.length ? Math.max(...vehicles.map(v => v.id)) + 1 : 1,
+        model,
+        number,
+        category,
+        available: true
+    });
+
+    saveData();
+    this.reset();
+    renderAll();
+    alert("Vehicle added successfully!");
+});
+
+// CUSTOMER BOOKING
+
+document.getElementById("bookingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    bookings.push({
+        id: bookings.length ? Math.max(...bookings.map(b => b.id)) + 1 : 1,
+        customer: document.getElementById("customerName").value.trim(),
+        phone: document.getElementById("customerPhone").value,
+        pickup: document.getElementById("pickup").value.trim(),
+        destination: document.getElementById("destination").value.trim(),
+        driverId: null,
+        vehicleId: null,
+        distance: 0,
+        extra: 0,
+        fare: 0,
+        status: "pending"
+    });
+
+    saveData();
+    this.reset();
+    renderAll();
+    alert("Taxi booked successfully!");
+});
+
+// DRIVER AND VEHICLE ALLOCATION
+
+document.getElementById("allocationForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const booking = bookings.find(b =>
+        b.id === Number(document.getElementById("allocateBooking").value)
+    );
+
+    const driverId = Number(document.getElementById("allocateDriver").value);
+    const vehicleId = Number(document.getElementById("allocateVehicle").value);
+
+    const driver = driverById(driverId);
+    const vehicle = vehicleById(vehicleId);
+
+    if (!booking || booking.status !== "pending" || booking.driverId) {
+        alert("Invalid or already allocated booking!");
+        return;
+    }
+
+    if (!driver || !vehicle || !vehicle.available) {
+        alert("Select a valid available driver and vehicle!");
+        return;
+    }
+
+    const driverBusy = bookings.some(b =>
+        b.driverId === driverId && b.status === "pending"
+    );
+
+    if (driverBusy) {
+        alert("This driver is already assigned to a trip!");
+        return;
+    }
+
+    booking.driverId = driverId;
+    booking.vehicleId = vehicleId;
+    vehicle.available = false;
+
+    saveData();
+    renderAll();
+    alert("Driver and vehicle allocated successfully!");
+});
+
+// TRIP AND FARE CALCULATION
+
+document.getElementById("tripForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const booking = bookings.find(b =>
+        b.id === Number(document.getElementById("tripBooking").value)
+    );
+
+    const distance = Number(document.getElementById("distance").value);
+    const extra = Number(document.getElementById("extraCharge").value);
+
+    if (!booking || booking.status !== "pending" || !booking.vehicleId) {
+        alert("Please select an allocated pending booking!");
+        return;
+    }
+
+    if (!Number.isFinite(distance) || distance <= 0 ||
+        !Number.isFinite(extra) || extra < 0) {
+        alert("Enter valid distance and additional charges!");
+        return;
+    }
+
+    const vehicle = vehicleById(booking.vehicleId);
+
+    const rates = {
+        Mini: 12,
+        Sedan: 15,
+        SUV: 20
+    };
+
+    const rate = rates[vehicle.category];
+
+    booking.distance = distance;
+    booking.extra = extra;
+    booking.fare = (distance * rate) + extra;
+    booking.status = "completed";
+
+    vehicle.available = true;
+
+    saveData();
+
+    document.getElementById("fareResult").innerHTML = `
+        <h2 style="color:#198754">Trip Completed Successfully!</h2>
+        <br>
+        Distance: ${distance} KM<br><br>
+        Vehicle: ${safe(vehicle.category)}<br><br>
+        Rate: ₹${rate}/KM<br><br>
+        Additional Charges: ₹${extra.toFixed(2)}<br><br>
+        <h2>Total Fare: ₹${booking.fare.toFixed(2)}</h2>
+    `;
+
+    this.reset();
+    renderAll();
+});
+
+// CANCEL BOOKING
+
+function cancelBooking(id) {
+    const booking = bookings.find(b => b.id === id);
+
+    if (!booking || booking.status !== "pending") {
+        alert("Only pending bookings can be cancelled!");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to cancel this booking?")) return;
+
+    booking.status = "cancelled";
+
+    const vehicle = vehicleById(booking.vehicleId);
+
+    if (vehicle) vehicle.available = true;
+
+    saveData();
+    renderAll();
+}
+
+// DRIVER TABLE
+
+function renderDrivers() {
+    document.getElementById("driverTable").innerHTML =
+        drivers.length ? drivers.map(d => `
+            <tr>
+                <td>${d.id}</td>
+                <td>${safe(d.name)}</td>
+                <td>${safe(d.phone)}</td>
+                <td>${safe(d.license)}</td>
+            </tr>
+        `).join("") : `<tr><td colspan="4" class="empty">No drivers found</td></tr>`;
+}
+
+// VEHICLE TABLE
+
+function renderVehicles() {
+    document.getElementById("vehicleTable").innerHTML =
+        vehicles.length ? vehicles.map(v => `
+            <tr>
+                <td>${v.id}</td>
+                <td>${safe(v.model)}</td>
+                <td>${safe(v.number)}</td>
+                <td>${safe(v.category)}</td>
+                <td class="${v.available ? 'available' : 'unavailable'}">
+                    ${v.available ? "Available" : "Allocated"}
+                </td>
+            </tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No vehicles found</td></tr>`;
+}
+
+// BOOKING TABLE
+
+function renderBookings() {
+    document.getElementById("bookingTable").innerHTML =
+        bookings.length ? bookings.map(b => `
+            <tr>
+                <td>${b.id}</td>
+                <td>${safe(b.customer)}</td>
+                <td>${safe(b.phone)}</td>
+                <td>${safe(b.pickup)}</td>
+                <td>${safe(b.destination)}</td>
+                <td>${statusBadge(b.status)}</td>
+            </tr>
+        `).join("") : `<tr><td colspan="6" class="empty">No bookings found</td></tr>`;
+}
+
+// ALLOCATION TABLE
+
+function renderAllocation() {
+    const allocated = bookings.filter(b => b.driverId);
+
+    document.getElementById("allocationTable").innerHTML =
+        allocated.length ? allocated.map(b => {
+            const d = driverById(b.driverId);
+            const v = vehicleById(b.vehicleId);
+
+            return `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>${safe(b.customer)}</td>
+                    <td>${safe(d?.name || "-")}</td>
+                    <td>${safe(v?.model || "-")}</td>
+                    <td>${statusBadge(b.status)}</td>
+                </tr>
+            `;
+        }).join("") : `<tr><td colspan="5" class="empty">No allocations found</td></tr>`;
+}
+
+// DROPDOWN OPTIONS
+
+function fillDropdowns() {
+    const pending = bookings.filter(b =>
+        b.status === "pending" && !b.driverId
+    );
+
+    document.getElementById("allocateBooking").innerHTML =
+        `<option value="">Select Booking</option>` +
+        pending.map(b => `
+            <option value="${b.id}">#${b.id} - ${safe(b.customer)}</option>
+        `).join("");
+
+    document.getElementById("allocateDriver").innerHTML =
+        `<option value="">Select Driver</option>` +
+        drivers.filter(d => !bookings.some(b =>
+            b.driverId === d.id && b.status === "pending"
+        )).map(d => `
+            <option value="${d.id}">${safe(d.name)}</option>
+        `).join("");
+
+    document.getElementById("allocateVehicle").innerHTML =
+        `<option value="">Select Vehicle</option>` +
+        vehicles.filter(v => v.available).map(v => `
+            <option value="${v.id}">${safe(v.model)} - ${safe(v.category)}</option>
+        `).join("");
+
+    const allocatedPending = bookings.filter(b =>
+        b.status === "pending" && b.vehicleId
+    );
+
+    document.getElementById("tripBooking").innerHTML =
+        `<option value="">Select Booking</option>` +
+        allocatedPending.map(b => `
+            <option value="${b.id}">#${b.id} - ${safe(b.customer)}</option>
+        `).join("");
+
+    document.getElementById("reportDriver").innerHTML =
+        `<option value="">Select Driver</option>` +
+        drivers.map(d => `
+            <option value="${d.id}">${safe(d.name)}</option>
+        `).join("");
+}
+
+// TRIP HISTORY
+
+function renderHistory() {
+    document.getElementById("historyTable").innerHTML =
+        bookings.length ? bookings.map(b => `
+            <tr>
+                <td>${b.id}</td>
+                <td>${safe(b.customer)}</td>
+                <td>${safe(b.pickup)} → ${safe(b.destination)}</td>
+                <td>${b.distance ? b.distance + " KM" : "-"}</td>
+                <td>₹${b.fare.toFixed(2)}</td>
+                <td>${statusBadge(b.status)}</td>
+                <td>
+                    ${b.status === "pending" ?
+                        `<button class="btn-red" onclick="cancelBooking(${b.id})">Cancel</button>` :
+                        "-"
+                    }
+                </td>
+            </tr>
+        `).join("") : `<tr><td colspan="7" class="empty">No trip history</td></tr>`;
+}
+
+// DRIVER-WISE REPORT
+
+function generateReport() {
+    const id = Number(document.getElementById("reportDriver").value);
+    const driver = driverById(id);
+
+    if (!driver) {
+        alert("Please select a driver!");
+        return;
+    }
+
+    const trips = bookings.filter(b =>
+        b.driverId === id && b.status === "completed"
+    );
+
+    const earnings = trips.reduce((sum, b) => sum + b.fare, 0);
+
+    document.getElementById("reportOutput").innerHTML = `
+        <h2>Driver Report</h2>
+        Driver Name: ${safe(driver.name)}<br><br>
+        Driver ID: ${driver.id}<br><br>
+        Total Completed Trips: ${trips.length}<br><br>
+        Total Earnings: ₹${earnings.toFixed(2)}
+        <br><br>
+        ${trips.map(b => `
+            Booking #${b.id} - ₹${b.fare.toFixed(2)}<br>
+        `).join("")}
+    `;
+}
+
+// DASHBOARD
+
+function renderDashboard() {
+    document.getElementById("totalDrivers").textContent = drivers.length;
+    document.getElementById("totalVehicles").textContent = vehicles.length;
+    document.getElementById("totalBookings").textContent = bookings.length;
+
+    const earnings = bookings
+        .filter(b => b.status === "completed")
+        .reduce((sum, b) => sum + b.fare, 0);
+
+    document.getElementById("totalEarnings").textContent =
+        "₹" + earnings.toFixed(2);
+
+    const recent = [...bookings].reverse().slice(0, 5);
+
+    document.getElementById("recentBookings").innerHTML =
+        recent.length ? recent.map(b => `
+            <tr>
+                <td>${b.id}</td>
+                <td>${safe(b.customer)}</td>
+                <td>${safe(b.pickup)}</td>
+                <td>${safe(b.destination)}</td>
+                <td>${statusBadge(b.status)}</td>
+            </tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No recent bookings</td></tr>`;
+}
+
+// UPDATE ALL SECTIONS
+
+function renderAll() {
+    renderDrivers();
+    renderVehicles();
+    renderBookings();
+    renderAllocation();
+    renderHistory();
+    renderDashboard();
+    fillDropdowns();
+}
+
+// INITIALIZE WEBSITE
+
+renderAll();
+
+</script>
+
+</body>
+</html>
